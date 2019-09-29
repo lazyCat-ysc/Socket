@@ -6,23 +6,23 @@ using System.Threading.Tasks;
 
 class MessageOperate
 {
-    private delegate void mainPlazaPack(int op, byte[] bytes);
+    private delegate void mainPlazaPack(int op, byte[] bytes, PlazaSession client);
     Dictionary<int, mainPlazaPack> mainPack = new Dictionary<int, mainPlazaPack>();
-    private delegate void subPlazaPack(byte[] bytes);
+    private delegate void subPlazaPack(byte[] bytes, PlazaSession client);
     Dictionary<int, subPlazaPack> subPack = new Dictionary<int, subPlazaPack>();
     public MessageOperate()
     {
         InitDictionary(); 
     }
-    public void MainPackHanlder(int op, PlazaSessionCode code)
+    public void MainPackHanlder(int op, PlazaSessionCode code, PlazaSession client)
     {
         if (mainPack.ContainsKey(op))
-            mainPack[op](code.SubCmdId,code.GetBytes);
+            mainPack[op](code.SubCmdId, code.GetBytes, client);
     }
-    public void SubPackHanlder(int op, byte[] bytes)
+    public void SubPackHanlder(int op, byte[] bytes, PlazaSession client)
     {
         if (subPack.ContainsKey(op))
-            subPack[op](bytes);
+            subPack[op](bytes, client);
     }
     public void InitDictionary()
     {

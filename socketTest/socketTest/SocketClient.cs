@@ -153,7 +153,10 @@ public class SocketClient
                 OnDisconnected(DisType.Disconnect, "bytesRead < 1");
                 return;
             }
-            OnReceive(byteBuffer, bytesRead);   //分析数据包内容，抛给逻辑层
+            ByteBuffer w = new ByteBuffer(byteBuffer);
+            string y = w.ReadString();
+            Console.WriteLine(y);
+            //OnReceive(byteBuffer, bytesRead);   //分析数据包内容，抛给逻辑层
             lock (client.GetStream())
             {         //分析完，再次监听服务器发过来的新消息
                 Array.Clear(byteBuffer, 0, byteBuffer.Length);   //清空数组

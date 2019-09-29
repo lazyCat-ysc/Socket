@@ -9,6 +9,7 @@ using System.Timers;
 using GameSever.Serializable;
 using GameSever.Data;
 using GameSever.Logic;
+using System.IO;
 using System.Reflection;
 
 namespace GameSever.Core
@@ -88,7 +89,7 @@ namespace GameSever.Core
                 Array.Copy(plazaSession.byteBuffer, sizeof(ushort), lenBytes, 0, bytesRead - sizeof(ushort));
                 PlazaSessionCode sessionCode = (PlazaSessionCode)serial.Decode(lenBytes, 0, lenBytes.Length);
                 MessageOperate msgOperate = new MessageOperate();
-                msgOperate.MainPackHanlder(sessionCode.MainCmdId, sessionCode);
+                msgOperate.MainPackHanlder(sessionCode.MainCmdId, sessionCode, plazaSession);
                 //ByteBuffer buff = new ByteBuffer(sessionCode.message.byteBuffer);
                 //Console.WriteLine(sessionCode.message.mainCmdId);
                 //Console.WriteLine(sessionCode.message.subCmdId);
@@ -280,7 +281,7 @@ namespace GameSever.Core
     //        message.data.data = protocol;
     //    }
 
-        public void Broadcast(PlazaSession client, MessageData message, bool isTalkSelf = false)
+        public void Broadcast(PlazaSession client, byte[] bytes, bool isTalkSelf = false)
         {
             for (int i = 0; i < clients.Length; i++)
             {
@@ -289,7 +290,7 @@ namespace GameSever.Core
                 if (clients[i] == client && !isTalkSelf) continue;
                 lock (clients[i])
                 {
-                    Send(clients[i], message);
+                    Send(clients[i], bytes);
                 }
             }
         }
@@ -321,11 +322,42 @@ namespace GameSever.Core
     //            Send(conns[i],protocol);
     //        }
     //    }
-
-        public bool Send(PlazaSession pla, MessageData messageData)
+        void OnWrite(IAsyncResult r)
+        {
+            try
+            {
+                outStream.EndWrite(r);
+            }
+            catch (Exception ex)
+            {
+                //Debug.LogError("OnWrite--->>>" + ex.Message);
+            }
+        }
+        public bool Send(PlazaSession pla, byte[] bytes)
         {
             outStream = pla.client.GetStream();
-            ByteBuffer buff = new ByteBuffer();
+            //MemoryStream ms = null;
+            //using (ms = new MemoryStream())
+            //{
+            //    ms.Position = 0;
+            //    BinaryWriter writer = new BinaryWriter(ms);
+            //    ushort msglen = (ushort)message.Length;
+            //    writer.Write(msglen);
+            //    writer.Write(message);
+            //    writer.Flush();
+                if (pla.client != null && pla.client.Connected)
+                {
+                    //NetworkStream stream = client.GetStream();
+                    //byte[] payload = ms.ToArray();
+                    outStream.BeginWrite(bytes, 0, bytes.Length, new AsyncCallback(OnWrite), null);
+                }
+                //else
+                //{
+                //    Debug.LogError("client.connected----->>false");
+                //}
+            //}
+            //outStream = pla.client.GetStream();
+            //ByteBuffer buff = new ByteBuffer();
             return false;
             //buff.WriteString(str);
             //SendMessage(buff, 0, 10);

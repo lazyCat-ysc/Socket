@@ -26,7 +26,7 @@ namespace GameSever
             SeverData cmd = new SeverData();
             cmd.ReadConfig();
             SeverNet sever = new SeverNet();
-            sever.Start("127.0.0.1",6379);
+            sever.Start("172.16.12.235",6379);
             //sever.protocol = new ProtocolBytes();
             while (true) ;
         }
