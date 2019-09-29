@@ -21,6 +21,7 @@ namespace GameSever.Core
         public int maxConn = 50;
         public static SeverNet instance;
         private Serial serial;
+        private NetworkStream outStream = null;
     //    Timer timer = new Timer(1000);
     //    public long heartBeatTime = 180;
     //    public ProtocolBase protocol;
@@ -325,8 +326,9 @@ namespace GameSever.Core
         {
             outStream = pla.client.GetStream();
             ByteBuffer buff = new ByteBuffer();
-            buff.WriteString(str);
-            SendMessage(buff, 0, 10);
+            return false;
+            //buff.WriteString(str);
+            //SendMessage(buff, 0, 10);
             //Serial ser = new Serial();
             //byte[] buff = ser.Encode(messageData);
             //byte[] buffLen = BitConverter.GetBytes(buff.Length);

@@ -46,3 +46,9 @@ E:\Git\commition\GameSever\obj\Debug\GameSever.pdb
 E:\Git\commition\GameSever\obj\Debug\GameSever.csprojResolveAssemblyReference.cache
 E:\Git\commition\GameSever\bin\Debug\GameSever.exe
 E:\Git\commition\GameSever\bin\Debug\GameSever.pdb
+E:\Git\Socket\GameSever\bin\Debug\GameSever.exe.config
+E:\Git\Socket\GameSever\obj\Debug\GameSever.exe
+E:\Git\Socket\GameSever\obj\Debug\GameSever.pdb
+E:\Git\Socket\GameSever\obj\Debug\GameSever.csprojResolveAssemblyReference.cache
+E:\Git\Socket\GameSever\bin\Debug\GameSever.exe
+E:\Git\Socket\GameSever\bin\Debug\GameSever.pdb

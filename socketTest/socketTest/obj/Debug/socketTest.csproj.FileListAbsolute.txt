@@ -112,3 +112,6 @@ E:\Git\commition\socketTest\socketTest\bin\Debug\UnityEngine.UnityWebRequestAudi
 E:\Git\commition\socketTest\socketTest\bin\Debug\UnityEngine.UnityWebRequestModule.xml
 E:\Git\commition\socketTest\socketTest\bin\Debug\UnityEngine.VideoModule.xml
 E:\Git\commition\socketTest\socketTest\bin\Debug\UnityEngine.XRModule.xml
+E:\Git\Socket\socketTest\socketTest\bin\Debug\socketTest.exe.config
+E:\Git\Socket\socketTest\socketTest\obj\Debug\socketTest.exe
+E:\Git\Socket\socketTest\socketTest\obj\Debug\socketTest.pdb
