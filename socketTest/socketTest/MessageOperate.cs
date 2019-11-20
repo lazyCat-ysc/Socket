@@ -7,28 +7,28 @@ using System.Threading.Tasks;
 class MessageOperate
 {
     private PlazaPackHanlder plazaPackHanlder = new PlazaPackHanlder();
-    private delegate void mainPlazaPack(int op, byte[] bytes, PlazaSession client);
+    private delegate void mainPlazaPack(int op, byte[] bytes);
     Dictionary<int, mainPlazaPack> mainPack = new Dictionary<int, mainPlazaPack>();
-    private delegate void subPlazaPack(byte[] bytes, PlazaSession client);
+    private delegate void subPlazaPack(byte[] bytes);
     Dictionary<int, subPlazaPack> subPack = new Dictionary<int, subPlazaPack>();
     public MessageOperate()
     {
         InitDictionary(); 
     }
-    public void MainPackHanlder(int op, PlazaSessionCode code, PlazaSession client)
+    public void MainPackHanlder(int op, PlazaSessionCode code)
     {
         if (mainPack.ContainsKey(op))
-            mainPack[op](code.SubCmdId, code.GetBytes, client);
+            mainPack[op](code.SubCmdId, code.GetBytes);
     }
-    public void SubPackHanlder(int op, byte[] bytes, PlazaSession client)
+    public void SubPackHanlder(int op, byte[] bytes)
     {
         if (subPack.ContainsKey(op))
-            subPack[op](bytes, client);
+            subPack[op](bytes);
     }
     public void InitDictionary()
     {
         mainPack.Add(0, SubPackHanlder);
-        subPack.Add(10, plazaPackHanlder.HandleRecevieMsg);
+        subPack.Add(1002, plazaPackHanlder.HandleRecevieMsg);
         subPack.Add(1, plazaPackHanlder.HandleRegisterAccount);
     }
 }

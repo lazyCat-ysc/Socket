@@ -17,3 +17,8 @@ I:\GameSever\obj\Release\GameSever.csproj.CoreCompileInputs.cache
 I:\GameSever\obj\Release\GameSever.csproj.CopyComplete
 I:\GameSever\obj\Release\GameSever.exe
 I:\GameSever\obj\Release\GameSever.pdb
+E:\Git\Socket\GameSever\bin\Release\GameSever.exe.config
+E:\Git\Socket\GameSever\obj\Release\GameSever.exe
+E:\Git\Socket\GameSever\obj\Release\GameSever.pdb
+E:\Git\Socket\GameSever\bin\Release\GameSever.exe
+E:\Git\Socket\GameSever\bin\Release\GameSever.pdb

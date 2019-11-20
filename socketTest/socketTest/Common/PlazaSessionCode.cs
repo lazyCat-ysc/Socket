@@ -31,5 +31,40 @@ class PlazaSessionCode
         message.subCmdId = subCmdId;
         message.byteBuffer = byteBuffer;
     }
+
+    public int MainCmdId
+    {
+        set
+        {
+            message.mainCmdId = value;
+        }
+        get
+        {
+            return message.mainCmdId;
+        }
+    }
+    public int SubCmdId
+    {
+        set
+        {
+            message.subCmdId = value;
+        }
+        get
+        {
+            return message.subCmdId;
+        }
+    }
+
+    public byte[] GetBytes
+    {
+        get
+        {
+            return message.byteBuffer;
+        }
+    }
+    public void SetBytes(byte[] bytes)
+    {
+        message.byteBuffer = bytes;
+    }
 }
 

@@ -62,5 +62,9 @@ class PlazaSessionCode
             return message.byteBuffer;
         }
     }
+    public void SetBytes(byte[] bytes)
+    {
+        message.byteBuffer = bytes;
+    }
 }
 

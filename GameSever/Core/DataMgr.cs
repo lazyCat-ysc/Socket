@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,12 +11,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace GameSever.Core
 {
-    class subCmdMgr
+    class DataMgr
     {
         private MySqlConnection sqlCon;
-        public static subCmdMgr instance;
+        public static DataMgr instance;
 
-        public subCmdMgr()
+        public DataMgr()
         {
             instance = this;
             Connect();
@@ -24,16 +24,16 @@ namespace GameSever.Core
         #region 连接mysql
         private void Connect()
         {
-            string sqlCom = "subCmdbase=game;subCmdSource=127.0.0.1;User Id=root;Password=64450252;Port=3306";
+            string sqlCom = "database=game;server=127.0.0.1;uid=root;pwd=64450252;Port=3306";
             sqlCon = new MySqlConnection(sqlCom);
             try
             {
-                Console.WriteLine("[subCmdMgr] Connect: connect Succeed");
+                Console.WriteLine("[DataMgr] Connect: connect Succeed");
                 sqlCon.Open();
             }
             catch (Exception e)
             {
-                Console.WriteLine("[subCmdMgr] Connect:" + e.Message);
+                Console.WriteLine("[DataMgr] Connect:" + e.Message);
                 return;
             }
         }
@@ -52,20 +52,45 @@ namespace GameSever.Core
             }
             catch(Exception e)
             {
-                Console.WriteLine("[subCmdMgr] CanRegister:" + e.Message);
+                Console.WriteLine("[DataMgr] CanRegister:" + e.Message);
                 return false;
             }
         }
         #endregion
+        public string GetUserName(string id)
+        {
+            string name = "";
+            string cmdStr = string.Format("select * from user where id='{0}';", id);
+            MySqlCommand sqlCom = new MySqlCommand(cmdStr, sqlCon);
+            try
+            {
+                MySqlDataReader subCmdReader = sqlCom.ExecuteReader();
+                if (!subCmdReader.HasRows)
+                {
+                    subCmdReader.Close();
+                    return name;
+                }
+                subCmdReader.Read();
+                name = subCmdReader.GetString(2);
+                subCmdReader.Close();
+                return name;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("[DataMgr] GetUserName:" + e.Message);
+                return name;
+            }
+        }
         #region 注册用户
-        public bool Register(string id, string pw)
+        public bool Register(string id, string pw, string name)
         {
             if (!CanRegister(id))
             {
-                Console.WriteLine("[subCmdMgr] Register : id has alread register");
+                Console.WriteLine("[DataMgr] Register : id has already register");
                 return false;
             }
-            string cmdStr = string.Format("insert into user set id='{0}',pw='{1}';", id, pw);
+            string guid = System.Guid.NewGuid().ToString("N");
+            string cmdStr = string.Format("insert into user set id='{0}',pw='{1}',name='{2}',guid='{3}';", id, pw, name, guid);
             MySqlCommand sqlCom = new MySqlCommand(cmdStr, sqlCon);
             try
             {
@@ -74,8 +99,8 @@ namespace GameSever.Core
             }
             catch(Exception e)
             {
-                
-                Console.WriteLine("[subCmdMgr] Register:" + e.Message);
+
+                Console.WriteLine("[DataMgr] Register:" + e.Message);
                 return false;
             }
         }

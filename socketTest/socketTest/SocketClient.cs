@@ -22,11 +22,13 @@ public class SocketClient
     private const int MAX_READ = 8192;
     private byte[] byteBuffer = new byte[MAX_READ];
     public static bool loggedIn = false;
+    public static SocketClient instance;
 
     // Use this for initialization
     public SocketClient()
     {
         serial = new Serial();
+        instance = this;
     }
 
     /// <summary>
@@ -90,16 +92,8 @@ public class SocketClient
         if (tcpClient.Connected)
         {
             Console.WriteLine("连接服务器成功");
-            client.GetStream().BeginRead(byteBuffer, 0, MAX_READ, new AsyncCallback(OnRead), null);
-            while(true)
-            {
-                Console.Write("发送消息:");
-                string str = Console.ReadLine();
-                outStream = client.GetStream();
-                ByteBuffer buff = new ByteBuffer();
-                buff.WriteString(str);
-                SendMessage(buff, 0, 10);
-            }
+            client.GetStream().BeginRead(byteBuffer, 0, MAX_READ, new AsyncCallback(OnRead), client);
+            onSendMsg();
             //NetworkManager.AddEvent(Protocal.Connect, new ByteBuffer());
         }
         else
@@ -109,6 +103,15 @@ public class SocketClient
         
     }
 
+    public void onSendMsg()
+    {
+        Console.Write("发送消息:");
+        string str = Console.ReadLine();
+        outStream = client.GetStream();
+        ByteBuffer buff = new ByteBuffer();
+        buff.WriteString(str);
+        SendMessage(buff, 0, 10);
+    }
     /// <summary>
     /// 写数据
     /// </summary>
@@ -153,18 +156,20 @@ public class SocketClient
                 OnDisconnected(DisType.Disconnect, "bytesRead < 1");
                 return;
             }
-            ByteBuffer w = new ByteBuffer(byteBuffer);
-            string y = w.ReadString();
-            Console.WriteLine(y);
-            //OnReceive(byteBuffer, bytesRead);   //分析数据包内容，抛给逻辑层
+            byte[] lenBytes = new byte[bytesRead - sizeof(ushort)];
+            Array.Copy(byteBuffer, sizeof(ushort), lenBytes, 0, bytesRead - sizeof(ushort));
+            PlazaSessionCode sessionCode = (PlazaSessionCode)serial.Decode(lenBytes, 0, lenBytes.Length);
+            MessageOperate msgOperate = new MessageOperate();
+            msgOperate.MainPackHanlder(sessionCode.MainCmdId, sessionCode);
             lock (client.GetStream())
             {         //分析完，再次监听服务器发过来的新消息
                 Array.Clear(byteBuffer, 0, byteBuffer.Length);   //清空数组
-                client.GetStream().BeginRead(byteBuffer, 0, MAX_READ, new AsyncCallback(OnRead), null);
+                client.GetStream().BeginRead(byteBuffer, 0, MAX_READ, new AsyncCallback(OnRead), client);
             }
         }
         catch (Exception ex)
         {
+            Console.WriteLine(ex.Message);
             //PrintBytes();
             OnDisconnected(DisType.Exception, ex.Message);
         }

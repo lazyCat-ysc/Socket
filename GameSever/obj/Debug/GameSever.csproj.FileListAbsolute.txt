@@ -52,3 +52,7 @@ E:\Git\Socket\GameSever\obj\Debug\GameSever.pdb
 E:\Git\Socket\GameSever\obj\Debug\GameSever.csprojResolveAssemblyReference.cache
 E:\Git\Socket\GameSever\bin\Debug\GameSever.exe
 E:\Git\Socket\GameSever\bin\Debug\GameSever.pdb
+E:\Git\Socket\GameSever\bin\Debug\MySql.Data.dll
+E:\Git\Socket\GameSever\bin\Debug\Google.Protobuf.dll
+E:\Git\Socket\GameSever\bin\Debug\BouncyCastle.Crypto.dll
+E:\Git\Socket\GameSever\bin\Debug\MySql.Data.xml

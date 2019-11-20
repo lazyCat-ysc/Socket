@@ -19,6 +19,11 @@ namespace GameSever
     {
         static void Main(string[] args)
         {
+            //DataMgr sql = new DataMgr();
+            ////bool isregister = sql.Register("479856082", "64450252", "爱睡觉的懒喵喵");
+            //string name = sql.GetUserName("407551879");
+            //Console.WriteLine(name);
+
             //MessageOperate tt = new MessageOperate();
             //tt.PackHanlder(0, new PlazaSessionCode());
             //XmlOperation xml = new XmlOperation();

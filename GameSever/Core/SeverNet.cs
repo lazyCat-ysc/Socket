@@ -212,75 +212,6 @@ namespace GameSever.Core
             //    }
             //}
         }
-    //    private void ProcessData(Connection con)
-    //    {
-    //        if (con.bufferCount < sizeof(Int32))
-    //            return;
-    //        Array.Copy(con.readBuffer,con.lenBytes,sizeof(Int32));
-    //        con.msgLength = BitConverter.ToInt32(con.lenBytes,0);
-    //        if (con.bufferCount < con.msgLength + sizeof(Int32))
-    //            return;
-            
-    //        lock(con)
-    //        {
-    //            Serial ser = new Serial();
-    //            MessageData message = new MessageData();
-    //            message = (MessageData)ser.Decode(con.readBuffer, sizeof(Int32), con.msgLength);
-    //            HandleMainMsg(con, message);
-    //        }
-    //        int count = con.bufferCount - con.msgLength - sizeof(Int32);
-    //        Array.Copy(con.readBuffer, con.msgLength + sizeof(Int32), con.readBuffer, 0, count);
-    //        con.bufferCount = count;
-    //        if (con.bufferCount > 0)
-    //            ProcessData(con);
-    //    }
-
-    //    private void HandleMainMsg(Connection con, MessageData messageData)
-    //    {
-    //        MethodInfo mm = this.GetType().GetMethod(SeverData.instance.GetMainCmd(messageData.data.mainCmdId));
-    //        Object[] obj = new object[] { con, messageData };
-    //        mm.Invoke(this, obj);
-    //        //if (messagesubCmd.subCmd.mainCmdId == 0)
-    //        //{
-    //        //    HandleSubMsg(con, messagesubCmd);
-    //        //}
-    //    }
-
-    //    public void HandleSysMsg(Connection con, MessageData messageData)
-    //    {
-    //        MethodInfo mm = handleConnect.GetType().GetMethod(SeverData.instance.GetSubCmd(messageData.data.subCmdId));
-    //        Object[] obj = new object[] { con, messageData };
-    //        mm.Invoke(handleConnect,obj);
-    //        //if (messagesubCmd.subCmd.subCmdId == 0)
-    //        //{
-    //        //    //Console.WriteLine("[更新心跳时间]:" + con.GetAddress());
-    //        //    con.lastTicketTime = Sys.GetTimeStamp();
-    //        //}
-    //        //else if(messagesubCmd.subCmd.subCmdId == 1)
-    //        //{
-    //        //    FixedMessage(con,ref messagesubCmd);
-    //        //    Broadcast(con, messagesubCmd);
-    //        //}
-    //    }
-
-    //    private void AddMessage(Connection con, ref MessageData message,int mainCmd, int subCmd, string msg)
-    //    {
-    //        ProtocolBytes protocol = new ProtocolBytes();
-    //        protocol.AddString(msg);
-    //        message.data.mainCmdId = mainCmd;
-    //        message.data.subCmdId = subCmd;
-    //        message.data.data = protocol;
-    //    }
-
-    //    private void FixedMessage(Connection con,ref MessageData message)
-    //    {
-    //        ProtocolBytes protocol = new ProtocolBytes();
-    //        protocol.AddString(con.GetAddress());
-    //        protocol.AddString(Sys.GetNowTime());
-    //        protocol.AddString(message.data.data.GetString());
-    //        message.data.data = protocol;
-    //    }
-
         public void Broadcast(PlazaSession client, byte[] bytes, bool isTalkSelf = false)
         {
             for (int i = 0; i < clients.Length; i++)
@@ -294,34 +225,6 @@ namespace GameSever.Core
                 }
             }
         }
-
-    //    private void HandleMsg(Connection con, ProtocolBase protocolBase)
-    //    {
-    //        string name = protocolBase.GetName();
-    //        ProtocolBytes pro = (ProtocolBytes)protocolBase;
-    //        int num = pro.GetInt(0);
-    //        Console.WriteLine("[收到协议]:" +name + num);
-    //        if(name == "HeartBeat")
-    //        {
-    //           // Console.WriteLine("[更新心跳时间]:" + con.GetAddress());
-    //            con.lastTicketTime = Sys.GetTimeStamp();
-    //        }
-    //    }
-
-    //    private void SetMessagesubCmd()
-    //    {
-
-    //    }
-
-    //    public void Broadcast(ProtocolBase protocol)
-    //    {
-    //        for(int i =0; i < conns.Length;i++)
-    //        {
-    //            if (conns[i] == null) continue;
-    //            if (!conns[i].isUsed) continue;
-    //            Send(conns[i],protocol);
-    //        }
-    //    }
         void OnWrite(IAsyncResult r)
         {
             try
@@ -330,131 +233,29 @@ namespace GameSever.Core
             }
             catch (Exception ex)
             {
+                Console.WriteLine("OnWrite--->>>" + ex.Message);
                 //Debug.LogError("OnWrite--->>>" + ex.Message);
             }
         }
-        public bool Send(PlazaSession pla, byte[] bytes)
+        public void Send(PlazaSession pla, byte[] bytes)
         {
-            outStream = pla.client.GetStream();
-            //MemoryStream ms = null;
-            //using (ms = new MemoryStream())
-            //{
-            //    ms.Position = 0;
-            //    BinaryWriter writer = new BinaryWriter(ms);
-            //    ushort msglen = (ushort)message.Length;
-            //    writer.Write(msglen);
-            //    writer.Write(message);
-            //    writer.Flush();
+            MemoryStream ms = null;
+            using (ms = new MemoryStream())
+            {
+                ms.Position = 0;
+                BinaryWriter writer = new BinaryWriter(ms);
+                ushort msglen = (ushort)bytes.Length;
+                writer.Write(msglen);
+                writer.Write(bytes);
+                writer.Flush();
                 if (pla.client != null && pla.client.Connected)
                 {
+                    outStream = pla.client.GetStream();
                     //NetworkStream stream = client.GetStream();
-                    //byte[] payload = ms.ToArray();
-                    outStream.BeginWrite(bytes, 0, bytes.Length, new AsyncCallback(OnWrite), null);
+                    byte[] payload = ms.ToArray();
+                    outStream.BeginWrite(payload, 0, payload.Length, null, null);
                 }
-                //else
-                //{
-                //    Debug.LogError("client.connected----->>false");
-                //}
-            //}
-            //outStream = pla.client.GetStream();
-            //ByteBuffer buff = new ByteBuffer();
-            return false;
-            //buff.WriteString(str);
-            //SendMessage(buff, 0, 10);
-            //Serial ser = new Serial();
-            //byte[] buff = ser.Encode(messageData);
-            //byte[] buffLen = BitConverter.GetBytes(buff.Length);
-            //byte[] sendBuff = buffLen.Concat(buff).ToArray();
-            //uint len = BitConverter.ToUInt32(sendBuff, 0);
-            //try
-            //{
-            //    con.socket.BeginSend(sendBuff, 0, sendBuff.Length, SocketFlags.None, SendCallBack, con);
-            //    return true;
-            //}
-            //catch (Exception e)
-            //{
-            //    MessageData message = new MessageData();
-            //    string msg = "收到 [" + con.GetAddress() + "] 退出聊天房间";
-            //    AddMessage(con, ref message, 0, 2, msg);
-            //    Broadcast(con, message);
-            //    Console.WriteLine("[SeverNet] Send:" + e.Message);
-            //    con.Close();
-            //    return false;
-            //}
+            }
         }
-
-    //    private void SendCallBack(IAsyncResult ar)
-    //    {
-    //        Connection conn = (Connection)ar.AsyncState;
-    //        lock (conn)
-    //        {
-    //           // Console.WriteLine(conn.socket.EndSend(ar));
-    //        }
-    //    }
-
-    //    public bool Send(Connection con, ProtocolBase protocol)
-    //    {
-    //        byte[] bytes = protocol.Encode();
-    //        byte[] length = BitConverter.GetBytes(bytes.Length);
-    //        byte[] sendBuff = length.Concat(bytes).ToArray();
-    //        try
-    //        {
-    //            con.socket.BeginSend(sendBuff, 0, sendBuff.Length, SocketFlags.None, null, null);
-    //            return true;
-    //        }
-    //        catch (Exception e)
-    //        {
-    //            Console.WriteLine("[SeverNet] Send:" + e.Message);
-    //            return false;
-    //        }
-    //    }
-
-    //    public bool Send(Connection con, string str)
-    //    {
-    //        byte[] bytes = System.Text.Encoding.UTF8.GetBytes(str);
-    //        byte[] length = BitConverter.GetBytes(bytes.Length);
-    //        byte[] sendBuff = length.Concat(bytes).ToArray();
-    //        try
-    //        {
-    //            con.socket.BeginSend(sendBuff,0,sendBuff.Length,SocketFlags.None,null,null);
-    //            return true;
-    //        }
-    //        catch(Exception e)
-    //        {
-    //            Console.WriteLine("[SeverNet] Send:"+ e.Message);
-    //            return false;
-    //        }
-    //    }
-    //    public void HandleMainTimer(object sender,ElapsedEventArgs e)
-    //    {
-    //        HeartBeat();
-    //        timer.Start();
-    //    }
-    //    public void HeartBeat()
-    //    {
-    //        //Console.WriteLine("[主定时器执行]");
-    //        long timeNow = Sys.GetTimeStamp();
-    //        for(int i = 0;i < conns.Length; i++)
-    //        {
-    //            Connection con = conns[i];
-    //            if (con == null) continue;
-    //            if (!con.isUsed) continue;
-    //            //Console.WriteLine(con.lastTicketTime);
-    //            //Console.WriteLine(timeNow - heartBeatTime);
-    //            if (con.lastTicketTime < timeNow - heartBeatTime)
-    //            {
-    //                Console.WriteLine("心跳引起断开");
-    //                lock(con)
-    //                {
-    //                    MessageData messageData = new MessageData();
-    //                    string msg = "收到 [" + con.GetAddress() + "] 退出聊天房间";
-    //                    AddMessage(con, ref messageData, 0, 2, msg);
-    //                    Broadcast(con, messageData);
-    //                    con.Close();
-    //                }
-                    
-    //            }
-    //        }
-    //    }
     }
 }
