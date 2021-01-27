@@ -56,3 +56,17 @@ E:\Git\Socket\GameSever\bin\Debug\MySql.Data.dll
 E:\Git\Socket\GameSever\bin\Debug\Google.Protobuf.dll
 E:\Git\Socket\GameSever\bin\Debug\BouncyCastle.Crypto.dll
 E:\Git\Socket\GameSever\bin\Debug\MySql.Data.xml
+E:\WorkSpace\work\git\Socket\GameSever\obj\Debug\GameSever.csprojAssemblyReference.cache
+E:\WorkSpace\work\git\Socket\GameSever\obj\Debug\GameSever.csproj.CoreCompileInputs.cache
+E:\WorkSpace\work\git\Socket\GameSever\obj\Debug\GameSever.exe
+E:\WorkSpace\work\git\Socket\GameSever\obj\Debug\GameSever.pdb
+E:\WorkSpace\work\git\Socket\GameSever\bin\Debug\GameSever.exe.config
+E:\WorkSpace\work\git\Socket\GameSever\bin\Debug\GameSever.exe
+E:\WorkSpace\work\git\Socket\GameSever\bin\Debug\GameSever.pdb
+E:\WorkSpace\work\git\Socket\GameSever\bin\Debug\MySql.Data.dll
+E:\WorkSpace\work\git\Socket\GameSever\bin\Debug\Google.Protobuf.dll
+E:\WorkSpace\work\git\Socket\GameSever\bin\Debug\BouncyCastle.Crypto.dll
+E:\WorkSpace\work\git\Socket\GameSever\bin\Debug\Ubiety.Dns.Core.dll
+E:\WorkSpace\work\git\Socket\GameSever\bin\Debug\Renci.SshNet.dll
+E:\WorkSpace\work\git\Socket\GameSever\bin\Debug\MySql.Data.xml
+E:\WorkSpace\work\git\Socket\GameSever\obj\Debug\GameSever.csproj.CopyComplete
