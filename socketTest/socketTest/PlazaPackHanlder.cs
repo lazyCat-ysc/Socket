@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GameSever.Core;
+using Utility;
 
 class PlazaPackHanlder
 {
-    private Serial serial = new Serial();
+    //private Serial serial = new Serial();
     PlazaSessionCode sessionCode = new PlazaSessionCode();
     //private DataMgr dataMgr = new DataMgr();
     public void HandleConnectSuccess(byte[] bytes, PlazaSession client)

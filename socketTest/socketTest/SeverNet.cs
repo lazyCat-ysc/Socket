@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Timers;
 using GameSever.Data;
+using Utility;
 
 namespace GameSever.Core
 {
@@ -92,9 +93,9 @@ namespace GameSever.Core
             msgLength = BitConverter.ToInt32(lenBytes, 0);
             if (buffCount < msgLength + sizeof(Int32))
                 return;
-            Serial ser = new Serial();
+            //Serial ser = new Serial();
             MessageData message = new MessageData();
-            message = (MessageData)ser.Decode(readBuff, sizeof(Int32), msgLength);
+            message = (MessageData)Serial.GetInstance.Decode(readBuff, sizeof(Int32), msgLength);
             HandleMainMsg(message);
             //ProtocolBytes proto = message.data.data;
             //Console.WriteLine(message.data.mainCmdId);
@@ -172,8 +173,8 @@ namespace GameSever.Core
         public bool Send(MessageData messageData)
         {
             
-            Serial ser = new Serial();
-            byte[] buff = ser.Encode(messageData);
+            //Serial ser = new Serial();
+            byte[] buff = Serial.GetInstance.Encode(messageData);
             byte[] buffLen = BitConverter.GetBytes(buff.Length);
             byte[] sendBuff = buffLen.Concat(buff).ToArray();
             uint len = BitConverter.ToUInt32(sendBuff, 0);

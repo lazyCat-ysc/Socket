@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
 using System.IO;
 using System.Text;
-using System;
 [Serializable]
     public class ByteBuffer
     {

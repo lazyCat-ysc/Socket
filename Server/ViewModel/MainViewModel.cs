@@ -1,4 +1,7 @@
-﻿using Server.Model;
+﻿using Server.Common.Base;
+using Server.Core;
+using Server.Model;
+using Server.View;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,17 +14,36 @@ namespace Server.ViewModel
     public class MainViewModel
     {
         public MainModel mainModel { get; set; }
+        public CommandBase startCommand { get; set; }
+        private SocketHandler socketHandler { get; set; }
+        private ServerSocket serverSocket;
+
         public MainViewModel()
         {
+            serverSocket = new ServerSocket();
             mainModel = new MainModel();
-            mainModel.PropertyChanged += new PropertyChangedEventHandler(UpdateIp);
-            //mainModel.Ip = "46464";
-            int i = 0;
-        }
-
-        private void UpdateIp(object sender, PropertyChangedEventArgs e)
-        {
-
+            socketHandler = SocketHandler.GetInstance;
+            mainModel.LaberText = "停止";
+            mainModel.ButtonText = "启动";
+            startCommand = new CommandBase();
+            startCommand.DoExecute = new Action<object>((o) => {
+                if(MainModel.status == 0)
+                {
+                    MainModel.status = 1;
+                    mainModel.LaberText = "运行中";
+                    mainModel.ButtonText = "停止";
+                    serverSocket.Start(mainModel.Port);
+                }
+                else
+                {
+                    MainModel.status = 0;
+                    mainModel.LaberText = "停止";
+                    mainModel.ButtonText = "启动";
+                    serverSocket.Close();
+                }
+            });
+            startCommand.DoCanExecute = new Func<object, bool>((o) => { return true; });
+            
         }
     }
 }

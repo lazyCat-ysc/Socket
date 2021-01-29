@@ -6,9 +6,11 @@
         xmlns:local="clr-namespace:Server"
         xmlns:ViewModel="clr-namespace:Server.ViewModel" x:Class="Server.View.MainView"
         mc:Ignorable="d"
+        Name="MainWindows"
         Title="Sever" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="1.8*"/>
         </Grid.RowDefinitions>
@@ -16,6 +18,14 @@
         <Label x:Name="laber1" Content="{Binding Path=mainModel.Ip}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="90,0,0,0">
         </Label>
         <Label x:Name="laber2" Content="端口：" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="220,0,0,0"/>
-        <Label x:Name="laber3" Content="" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="270,0,0,0"/>
+        <Label x:Name="laber3" Content="{Binding Path=mainModel.Port}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="270,0,0,0"/>
+        <Label x:Name="laber4" Content="运行状态：" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="340,0,0,0"/>
+        <Label x:Name="laber5" Content="{Binding Path=mainModel.LaberText}" Foreground="Red" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="440,0,0,0"/>
+        <Button x:Name="button" Content="{Binding Path=mainModel.ButtonText}" HorizontalAlignment="Right" VerticalAlignment="Center" Width="100" Height="40" Margin="0,0,0,0" Command="{Binding startCommand}" CommandParameter="{Binding ElementName=MainWindows}" />
+        <Button x:Name="button1" Grid.Row="1" Content="设置" HorizontalAlignment="Left" VerticalAlignment="Center" Width="100" Height="40" Margin="0,0,0,0" IsEnabled="False" />
+        <TabPanel x:Name="set"  Grid.Row="2"  HorizontalAlignment="Left" Height="340" VerticalAlignment="Top" Width="794" Margin="0,0,0,0">
+            <Label x:Name="laber6" Content="最大人数："  HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" />
+            <TextBox x:Name="textBox" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding Path=mainModel.TextBox}" VerticalAlignment="Center" Width="40" Margin="-16.4,7,0,5.2"/>
+        </TabPanel>
     </Grid>
 </Window>

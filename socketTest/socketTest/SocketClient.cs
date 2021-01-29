@@ -1,10 +1,8 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Collections;
-using System.Collections.Generic;
+using Utility;
 
 public enum DisType
 {
@@ -18,7 +16,7 @@ public class SocketClient
     private NetworkStream outStream = null;
     private MemoryStream memStream;
     private BinaryReader reader;
-    private Serial serial;
+    //private Serial serial;
     private const int MAX_READ = 8192;
     private byte[] byteBuffer = new byte[MAX_READ];
     public static bool loggedIn = false;
@@ -27,7 +25,7 @@ public class SocketClient
     // Use this for initialization
     public SocketClient()
     {
-        serial = new Serial();
+        //serial = new Serial();
         instance = this;
     }
 
@@ -61,7 +59,7 @@ public class SocketClient
             IPAddress[] address = Dns.GetHostAddresses(host);
             if (address.Length == 0)
             {
-                Debug.LogError("host invalid");
+                //Debug.LogError("host invalid");
                 return;
             }
             if (address[0].AddressFamily == AddressFamily.InterNetworkV6)
@@ -79,7 +77,7 @@ public class SocketClient
         }
         catch (Exception e)
         {
-            Close(); Debug.LogError(e.Message);
+            //Close(); Debug.LogError(e.Message);
         }
     }
 
@@ -110,7 +108,8 @@ public class SocketClient
         outStream = client.GetStream();
         ByteBuffer buff = new ByteBuffer();
         buff.WriteString(str);
-        SendMessage(buff, 0, 10);
+        ServerPackage serverPackage = new ServerPackage(0, 1, 1, buff.ToBytes());
+        SendMessage(serverPackage);
     }
     /// <summary>
     /// 写数据
@@ -131,10 +130,11 @@ public class SocketClient
                 //NetworkStream stream = client.GetStream();
                 byte[] payload = ms.ToArray();
                 outStream.BeginWrite(payload, 0, payload.Length, new AsyncCallback(OnWrite), null);
+                outStream.BeginWrite(payload, 0, payload.Length, new AsyncCallback(OnWrite), null);
             }
             else
             {
-                Debug.LogError("client.connected----->>false");
+                //Debug.LogError("client.connected----->>false");
             }
         }
     }
@@ -158,7 +158,7 @@ public class SocketClient
             }
             byte[] lenBytes = new byte[bytesRead - sizeof(ushort)];
             Array.Copy(byteBuffer, sizeof(ushort), lenBytes, 0, bytesRead - sizeof(ushort));
-            PlazaSessionCode sessionCode = (PlazaSessionCode)serial.Decode(lenBytes, 0, lenBytes.Length);
+            PlazaSessionCode sessionCode = (PlazaSessionCode)Serial.GetInstance.Decode(lenBytes, 0, lenBytes.Length);
             MessageOperate msgOperate = new MessageOperate();
             msgOperate.MainPackHanlder(sessionCode.MainCmdId, sessionCode);
             lock (client.GetStream())
@@ -201,7 +201,7 @@ public class SocketClient
         {
             returnStr += byteBuffer[i].ToString("X2");
         }
-        Debug.LogError(returnStr);
+        //Debug.LogError(returnStr);
     }
 
     /// <summary>
@@ -215,7 +215,7 @@ public class SocketClient
         }
         catch (Exception ex)
         {
-            Debug.LogError("OnWrite--->>>" + ex.Message);
+            //Debug.LogError("OnWrite--->>>" + ex.Message);
         }
     }
 
@@ -302,17 +302,17 @@ public class SocketClient
     /// </summary>
     public void SendConnect()
     {
-        ConnectServer("127.0.0.1", 6379);
+        ConnectServer("172.16.9.151", 10085);
     }
 
     /// <summary>
     /// 发送消息
     /// </summary>
-    public void SendMessage(ByteBuffer buffer, int mainCmd, int subCmd)
+    public void SendMessage(ServerPackage serverPackage)
     {
-        PlazaSessionCode sessionCode = new PlazaSessionCode(mainCmd, subCmd, buffer.ToBytes());
-        byte[] bytes = serial.Encode(sessionCode);
+        //PlazaSessionCode sessionCode = new PlazaSessionCode(mainCmd, subCmd, buffer.ToBytes());
+        byte[] bytes = Serial.GetInstance.Encode(serverPackage);
         SessionSend(bytes);
-        buffer.Close();
+        //buffer.Close();
     }
 }
