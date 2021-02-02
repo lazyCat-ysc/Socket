@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Utility;
 
 namespace Server.Common
@@ -13,7 +9,7 @@ namespace Server.Common
         {
             EVENT_SEND_PACKAGE,
             EVENT_TEXT
-        }
+        } 
 
         private static ServerEvent Instance;
         public delegate void EventHandler(ServerPackage serverPackage);

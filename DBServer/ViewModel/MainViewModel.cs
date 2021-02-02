@@ -17,13 +17,14 @@ namespace Server.ViewModel
         public CommandBase startCommand { get; set; }
         private SocketHandler socketHandler { get; set; }
         private ServerSocket serverSocket;
+        private MySqlUser mySqlUser;
 
         public MainViewModel()
         {
             serverSocket = new ServerSocket();
             mainModel = new MainModel();
             socketHandler = SocketHandler.GetInstance;
-            MySqlCore.GetInstance.GetSqlConnection("655");
+            mySqlUser = MySqlUser.GetInstance;
             mainModel.LaberText = "停止";
             mainModel.ButtonText = "启动";
             startCommand = new CommandBase();
@@ -34,6 +35,7 @@ namespace Server.ViewModel
                     mainModel.LaberText = "运行中";
                     mainModel.ButtonText = "停止";
                     serverSocket.Start(mainModel.Port);
+                    
                 }
                 else
                 {

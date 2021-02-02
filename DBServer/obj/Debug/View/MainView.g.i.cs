@@ -149,7 +149,7 @@ namespace Server.View {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Server;component/view/mainview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/DBServer;component/view/mainview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\View\MainView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -33,9 +33,11 @@ namespace Server.ViewModel
                     mainModel.LaberText = "运行中";
                     mainModel.ButtonText = "停止";
                     serverSocket.Start(mainModel.Port);
+                    SocketClient.GetInstance.SendConnect("172.16.9.151", 10086);
                 }
                 else
                 {
+                    SocketClient.GetInstance.Close();
                     MainModel.status = 0;
                     mainModel.LaberText = "停止";
                     mainModel.ButtonText = "启动";

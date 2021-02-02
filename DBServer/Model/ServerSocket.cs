@@ -1,10 +1,9 @@
 ﻿using Server.Common;
 using Server.Core;
-using Server.ViewModel;
 using System;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using Utility;
 
 namespace Server.Model
@@ -27,6 +26,7 @@ namespace Server.Model
             {
                 clients[i] = new SocketBase();
             }
+
             ServerEvent.GetInstance.SendPackage(ServerEvent.EventType.EVENT_SEND_PACKAGE, new ServerPackage(10,20,30));
             tcpListener = new TcpListener(new IPEndPoint(IPAddress.Any, port));
             tcpListener.Start();

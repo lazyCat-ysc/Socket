@@ -1,0 +1,6 @@
+E:\WorkSpace\work\git\Socket\Utility\Utility\bin\Release\Utility.dll
+E:\WorkSpace\work\git\Socket\Utility\Utility\bin\Release\Utility.pdb
+E:\WorkSpace\work\git\Socket\Utility\Utility\obj\Release\Utility.csproj.CoreCompileInputs.cache
+E:\WorkSpace\work\git\Socket\Utility\Utility\obj\Release\Utility.dll
+E:\WorkSpace\work\git\Socket\Utility\Utility\obj\Release\Utility.pdb
+E:\WorkSpace\work\git\Socket\Utility\Utility\obj\Release\Utility.csprojAssemblyReference.cache
